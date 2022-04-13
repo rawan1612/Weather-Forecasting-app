@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.dummypro">
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"></uses-permission>
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Dummypro">
+        <activity
+            android:name=".home.view.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".daily.view.RecycleView"
+            android:exported="true"></activity>
+        <activity android:name=".settings.Settings"
+            android:exported="true"></activity>
+        <activity android:name=".favourite.view.AddFav"
+            android:exported="true"></activity>
+        <activity android:name=".favourite.view.FavDetails"
+            android:exported="true"></activity>
+        <activity android:name=".alert.view.AlertActivity"
+            android:exported="true"></activity>
+        <activity android:name=".alert.view.AlertRecycler"
+            android:exported="true"></activity>
+
+    </application>
+
+
+</manifest>

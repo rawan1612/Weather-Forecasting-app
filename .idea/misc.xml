@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/drawable/gradient_bg.xml" value="0.1965" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/layout/activity_main.xml" value="0.2346014492753623" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/layout/adapter_daily.xml" value="0.22826086956521738" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/layout/alert_item.xml" value="0.223731884057971" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/layout/alert_screen.xml" value="0.223731884057971" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/layout/daily_screen.xml" value="0.22826086956521738" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/layout/dummy.xml" value="0.1" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/layout/fav_details.xml" value="0.22826086956521738" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/layout/fav_item.xml" value="0.1" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/layout/fav_screen.xml" value="0.1" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/layout/home_screen.xml" value="0.264" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/layout/recycle_alert.xml" value="0.223731884057971" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/layout/setting_screen.xml" value="0.209375" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/layout/toolbar.xml" value="0.1265625" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/menu-ar/nav_menu.xml" value="0.221875" />
+        <entry key="..\:/ITI fundementals/kotlin/dummypro/app/src/main/res/menu/nav_menu.xml" value="0.209375" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

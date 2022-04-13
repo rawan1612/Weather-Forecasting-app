@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">dummypro</string>
+    <string name="view_daily_forecasting">تنبؤات الطقس</string>
+    <string name="open">افتح</string>
+    <string name="close">اغلق</string>
+    <string name="temperature">درجة الحرارة</string>
+    <string name="wind_speed">سرعة الرياح</string>
+    <string name="language">اللغة</string>
+    <string name="Clouds">السحاب</string>
+    <string name="Wind">الرياح</string>
+    <string name="Pressure">الضغط</string>
+    <string name="Humidity">الرطوبة</string>
+    <string name="enter_city">أدخل اسم المدينة</string>
+    <string name="add_fav">اضف المدينة للمفضلة</string>
+    <string name="get">أبحث</string>
+    <string name="save">حفظ</string>
+    <string name="description">وصف التنبيه</string>
+    <string name="alert_time">وقت التنبيه</string>
+    <string name="start_date">بداية التنبيه</string>
+    <string name="duration">مدة التنبيه</string>
+    <string name="set">ضبط التنبيه</string>
+    <string name="alert_desc">أدخل وصف التنبيه</string>
+
+
+
+</resources>
