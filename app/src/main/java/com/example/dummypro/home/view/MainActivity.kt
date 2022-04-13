@@ -24,10 +24,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isInvisible
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.dummypro.model.MainRepository
 import com.example.dummypro.R
 import com.example.dummypro.alert.view.AlertRecycler
 import com.example.dummypro.daily.view.RecycleView
@@ -35,6 +35,7 @@ import com.example.dummypro.favourite.view.AddFav
 import com.example.dummypro.favourite.viewmodel.FavViewModel
 import com.example.dummypro.home.modelview.MainViewModel
 import com.example.dummypro.home.modelview.viewModelFactory
+import com.example.dummypro.model.MainRepository
 import com.example.dummypro.model.fav.FavCountry
 import com.example.dummypro.network.RetrofitService
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -76,7 +77,14 @@ open class MainActivity : AppCompatActivity() {
     lateinit var dailyBtn: TextView
     lateinit var toggle: ActionBarDrawerToggle
     private lateinit var addToFav : FloatingActionButton
+    lateinit var weatherInfo: SharedPreferences
+    lateinit var toolbar: Toolbar
+    lateinit var drawerLayout: DrawerLayout
+   lateinit var navView: NavigationView
 
+
+
+    var offline : Boolean = false;
     companion object {
          const val PERMISSION_REQUEST_ACCESS_LOCATION = 100
          var longitude: Double = 0.0
@@ -90,6 +98,7 @@ open class MainActivity : AppCompatActivity() {
 
         super.onCreate(savedInstanceState)
         getSharedPreferences()
+       weatherInfo = this.getSharedPreferences("weatherInfo", MODE_PRIVATE)
         if (sharedLangValue == "ar") {
             val config = resources.configuration
             val lang = "ar" // your language code
@@ -108,8 +117,8 @@ open class MainActivity : AppCompatActivity() {
         } else {
             setContentView(R.layout.activity_main)
         }
+        initView()
         // fav_screen
-        addToFav = findViewById(R.id.fab_add)
         favViewModel = ViewModelProvider(
             this,
             ViewModelProvider.AndroidViewModelFactory.getInstance(application)
@@ -120,11 +129,9 @@ open class MainActivity : AppCompatActivity() {
             Toast.makeText(this,"Country Added to favorite",Toast.LENGTH_LONG).show()
         }
 
+
         // navigation drawer
-        var toolbar: Toolbar
-        toolbar = findViewById(R.id.toolbar)
-        val drawerLayout: DrawerLayout = findViewById(R.id.drawerLayout)
-        val navView: NavigationView = findViewById(R.id.nav_view)
+
         toggle = ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
@@ -132,6 +139,15 @@ open class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "Connected", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(this, "Disconnected", Toast.LENGTH_SHORT).show()
+            dailyBtn.isInvisible = true
+            temp.text = weatherInfo.getString("temp","0.0")
+            addressTV.text = weatherInfo.getString("country","")
+            wind.text = weatherInfo.getString("wind","0.0")
+            cloud.text = weatherInfo.getString("clouds","0.0")
+            humidity.text = weatherInfo.getString("humidity","0.0")
+            pressure.text = weatherInfo.getString("pressure","0.0")
+            desc.text = weatherInfo.getString("desc","")
+            dateTime.text = weatherInfo.getString("lastUpdate","")
         }
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -163,17 +179,7 @@ open class MainActivity : AppCompatActivity() {
 
 
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this)
-        desc = findViewById(R.id.status)
-        temp = findViewById(R.id.temp)
-        cityName = findViewById(R.id.cityName)
-        button = findViewById(R.id.button)
-        cloud = findViewById(R.id.clouds)
-        wind = findViewById(R.id.wind)
-        pressure = findViewById(R.id.pressure)
-        humidity = findViewById(R.id.humidity)
-        addressTV = findViewById(R.id.address)
-        dateTime = findViewById(R.id.timeDate)
-        dailyBtn = findViewById(R.id.dailyBtn)
+
         dailyBtn.setOnClickListener {
             val intent = Intent(this, RecycleView::class.java).apply {
                 putExtra("longitude", longitude)
@@ -246,11 +252,13 @@ open class MainActivity : AppCompatActivity() {
                     if (location == null) {
                         Toast.makeText(this, "no location found", Toast.LENGTH_SHORT).show()
                     } else {
+                        offline = true;
                         longitude = location.longitude
                         latitude = location.latitude
                         ((latitude * 100.0).roundToLong() / 100.0).also { latitude = it }
                         longitude =  (longitude * 100.0).roundToLong() / 100.0
                         callApiWithLatAndLong(latitude, longitude)
+
                         gc = Geocoder(this, Locale.getDefault())
                         addresses = gc.getFromLocation(location.latitude, location.longitude, 2)
                         address = addresses[0]
@@ -337,8 +345,8 @@ open class MainActivity : AppCompatActivity() {
             humidity.text = it.current.humidity.toString()
             if(sharedWindUnit == "meter/sec"){
                 if (sharedTempUnit=="imperial"){
-                    val solution:Double = String.format("%.1f", it.current.windSpeed*2.2).toDouble()
-                    wind.text = solution.toString()
+                    val solution:String = String.format("%.1f", it.current.windSpeed*2.2)
+                    wind.text = solution
                 }
                 else {
                     wind.text =it.current.windSpeed.toString()
@@ -346,8 +354,8 @@ open class MainActivity : AppCompatActivity() {
             }
             if(sharedWindUnit == "miles/hour"){
                 if (sharedTempUnit=="imperial"){
-                    val solution:Double = String.format("%.1f", it.current.windSpeed*0.4).toDouble()
-                    wind.text = solution.toString()
+                    val solution:String = String.format("%.1f", it.current.windSpeed*0.4)
+                    wind.text = solution
                 }
                 else {
                     wind.text = it.current.windSpeed.toString()
@@ -364,7 +372,22 @@ open class MainActivity : AppCompatActivity() {
             val timeFormatter = DateTimeFormatter.ofPattern("hh : mm a")
             val timeText: String = currTime.format(timeFormatter)
             dateTime.text = "$parsedDate $timeText"
-
+            if(offline) {
+                val editor:SharedPreferences.Editor =  weatherInfo.edit()
+                editor.putFloat("latitude", latitude.toFloat())
+                editor.putFloat("longitude", longitude.toFloat())
+                editor.putString("desc",desc.text.toString())
+                editor.putString("country",addressTV.text.toString())
+                editor.putString("wind",wind.text.toString())
+                editor.putString("pressure",pressure.text.toString())
+                editor.putString("clouds",cloud.text.toString())
+                editor.putString("humidity",humidity.text.toString())
+                editor.putString("temp", temp.text.toString())
+                editor.putString("lastUpdate",dateTime.text.toString())
+                editor.apply()
+                editor.commit()
+                offline=false
+            }
 
         })
         viewModel.errorMessage.observe(this, Observer {
@@ -372,6 +395,7 @@ open class MainActivity : AppCompatActivity() {
         })
 
         viewModel.getAllInfo(latitude, longitude, sharedTempUnit, sharedLangValue)
+
     }
 
     private fun getSharedPreferences() {
@@ -381,6 +405,7 @@ open class MainActivity : AppCompatActivity() {
         sharedTempUnit = sharedPreferences.getString("temperature", "standard").toString()
         sharedWindUnit = sharedPreferences.getString("wind_speed", "meter/sec").toString()
         sharedLangValue = sharedPreferences.getString("language", "en").toString()
+
 
     }
     override fun onBackPressed() {
@@ -406,6 +431,25 @@ open class MainActivity : AppCompatActivity() {
             @Suppress("DEPRECATION")
             return networkInfo.isConnected
         }
+    }
+    fun initView(){
+        addToFav = findViewById(R.id.fab_add)
+        desc = findViewById(R.id.status)
+        temp = findViewById(R.id.temp)
+        cityName = findViewById(R.id.cityName)
+        button = findViewById(R.id.button)
+        cloud = findViewById(R.id.clouds)
+        wind = findViewById(R.id.wind)
+        pressure = findViewById(R.id.pressure)
+        humidity = findViewById(R.id.humidity)
+        addressTV = findViewById(R.id.address)
+        dateTime = findViewById(R.id.timeDate)
+        dailyBtn = findViewById(R.id.dailyBtn)
+         toolbar = findViewById(R.id.toolbar)
+        drawerLayout = findViewById(R.id.drawerLayout)
+        navView= findViewById(R.id.nav_view)
+
+
     }
 
 }

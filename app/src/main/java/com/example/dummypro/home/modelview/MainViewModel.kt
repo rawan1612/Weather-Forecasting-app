@@ -14,9 +14,11 @@ import kotlinx.coroutines.*
         val dailyList = MutableLiveData<List<DailyItem>?>()
         val errorMessage = MutableLiveData<String>()
         var job: Job? = null
-
+        val coroutineExceptionHandler = CoroutineExceptionHandler{_, throwable ->
+            throwable.printStackTrace()
+        }
         fun getAllInfo(lat: Double,long: Double,unit:String,lang:String) {
-            job = CoroutineScope(Dispatchers.IO).launch {
+            job = CoroutineScope(Dispatchers.IO + coroutineExceptionHandler).launch {
                 while (isActive) {
                     val response = repository.getAllInfo(lat, long,unit,lang)
                     withContext(Dispatchers.Main) {

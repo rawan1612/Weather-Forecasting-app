@@ -39,8 +39,8 @@ class DailyAdapter : RecyclerView.Adapter<MainViewHolder>() {
         holder.binding.status.text = item.weather?.get(0)?.description.toString()
         if(sharedWindUnit == "meter/sec"){
             if (sharedTempUnit=="imperial"){
-                val solution:Double = String.format("%.1f", item.windSpeed*2.2).toDouble()
-                holder.binding.wind.text  = solution.toString()
+                val solution:String = String.format("%.1f", item.windSpeed*2.2)
+                holder.binding.wind.text  = solution
             }
             else {
                 holder.binding.wind.text  = item.windSpeed.toString()
@@ -48,8 +48,8 @@ class DailyAdapter : RecyclerView.Adapter<MainViewHolder>() {
         }
         if(sharedWindUnit == "miles/hour"){
             if (sharedTempUnit=="imperial"){
-                val solution:Double = String.format("%.1f", item.windSpeed*0.4).toDouble()
-                holder.binding.wind.text  =solution.toString()
+                val solution:String = String.format("%.1f", item.windSpeed*0.4)
+                holder.binding.wind.text  =solution
             }
             else {
                 holder.binding.wind.text  = item.windSpeed.toString()
